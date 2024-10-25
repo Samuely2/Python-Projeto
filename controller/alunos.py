@@ -11,7 +11,7 @@ def getIndex():
 @alunos_blueprint.route('/alunos', methods=['GET'])
 def get_alunos():
     alunos = listar_alunos()
-    return render_template("alunos.html", alunos=alunos)
+    return render_template("alunos/alunos.html", alunos=alunos)
 
 # ROTA PARA OBTER UM ALUNO ESPECÍFICO POR ID
 @alunos_blueprint.route('/alunos/<int:id_aluno>', methods=['GET'])
@@ -25,7 +25,7 @@ def get_aluno(id_aluno):
 # ROTA PARA EXIBIR FORMULÁRIO DE CRIAÇÃO DE UM NOVO ALUNO
 @alunos_blueprint.route('/alunos/adicionar', methods=['GET'])
 def adicionar_aluno_page():
-    return render_template('criarAlunos.html')
+    return render_template('alunos/criarAlunos.html')
 
 # ROTA PARA CRIAR UM NOVO ALUNO
 @alunos_blueprint.route('/alunos', methods=['POST'])
@@ -40,7 +40,7 @@ def create_aluno():
 def editar_aluno_page(id_aluno):
     try:
         aluno = aluno_por_id(id_aluno)
-        return render_template('aluno_update.html', aluno=aluno)
+        return render_template('alunos/aluno_update.html', aluno=aluno)
     except AlunoNaoEncontrado:
         return jsonify({'message': 'Aluno não encontrado'}), 404
 
