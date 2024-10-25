@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes da Turma</title>
+</head>
+
+<body>
+  <h1>{{ turma.descricao }}</h1>
+  <p>ID: {{ turma.id }}</p>
+  <p>Professor ID: {{ turma.professor_id }}</p>
+  <p>Status: {{ 'Ativa' if turma.ativo else 'Inativa' }}</p>
+  <a href="{{ url_for('turma.editar_turma_page', id_turma=turma.id) }}">Editar</a>
+  <form action="{{ url_for('turma.delete_turma', id_turma=turma.id) }}" method="POST">
+    <button type="submit">Deletar</button>
+  </form>
+  <a href="{{ url_for('turma.get_turmas') }}">Voltar à lista de turmas</a>
+</body>
+
+</html>

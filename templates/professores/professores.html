@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Professores</title>
+</head>
+
+<body>
+  <h1>Lista de Professores</h1>
+  <ul>
+    {% for professor in professores %}
+    <li><a href="{{ url_for('professor.get_professor', id_professor=professor.id) }}">{{ professor.nome }} (ID: {{ professor.id }})</a></li>
+    {% endfor %}
+  </ul>
+
+  <a href="{{ url_for('professor.adicionar_professor_page') }}">Adicionar Novo Professor</a>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Turmas</title>
+</head>
+
+<body>
+  <h1>Lista de Turmas</h1>
+  <ul>
+    {% for turma in turmas %}
+    <li><a href="{{ url_for('turma.get_turma', id_turma=turma.id) }}">{{ turma.descricao }} (ID: {{ turma.id }})</a></li>
+    {% endfor %}
+  </ul>
+  <a href="{{ url_for('turma.adicionar_turma_page') }}">Adicionar nova turma</a>
+</body>
+
+</html>

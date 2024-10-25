@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Professor</title>
+</head>
+
+<body>
+  <h1>Detalhes do Professor</h1>
+  <p><strong>ID:</strong> {{ professor.id }}</p>
+  <p><strong>Nome:</strong> {{ professor.nome }}</p>
+  <p><strong>Idade:</strong> {{ professor.idade }}</p>
+  <p><strong>Matéria:</strong> {{ professor.materia }}</p>
+  <p><strong>Observações:</strong> {{ professor.observacoes }}</p>
+
+  <a href="{{ url_for('professor.editar_professor_page', id_professor=professor.id) }}">Editar Professor</a>
+  <form action="{{ url_for('professor.delete_professor', id_professor=professor.id) }}" method="POST">
+    <button type="submit">Deletar Professor</button>
+  </form>
+  <br>
+  <a href="{{ url_for('professor.get_professores') }}">Voltar à Lista de Professores</a>
+</body>
+
+</html>

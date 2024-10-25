@@ -12,7 +12,7 @@ def main():
 @turma_blueprint.route('/turmas', methods=['GET'])
 def get_turmas():
     turmas = listar_turmas()
-    return render_template("turmas.html", turmas=turmas)
+    return render_template("turma/turmas.html", turmas=turmas)
 
 # ROTA PARA OBTER UMA TURMA ESPECÍFICA POR ID
 @turma_blueprint.route('/turmas/<int:id_turma>', methods=['GET'])
@@ -26,7 +26,7 @@ def get_turma(id_turma):
 # ROTA PARA EXIBIR FORMULÁRIO DE CRIAÇÃO DE UMA NOVA TURMA
 @turma_blueprint.route('/turmas/adicionar', methods=['GET'])
 def adicionar_turma_page():
-    return render_template('criarTurma.html')
+    return render_template('turma/criarTurma.html')
 
 # ROTA PARA CRIAR UMA NOVA TURMA
 @turma_blueprint.route('/turmas', methods=['POST'])
@@ -47,7 +47,7 @@ def create_turma():
 def editar_turma_page(id_turma):
     try:
         turma = turma_por_id(id_turma)
-        return render_template('turma_update.html', turma=turma)
+        return render_template('turma/turma_update.html', turma=turma)
     except TurmaNaoEncontrada:
         return jsonify({'message': 'Turma não encontrada'}), 404
 
