@@ -14,13 +14,14 @@ class Aluno(db.Model):
     
     turma = db.relationship('Turma', back_populates='alunos')
 
-    def __init__(self, nome, idade=None, data_nascimento=None, nota_primeiro_semestre=None, nota_segundo_semestre=None):
+    def __init__(self, nome, idade=None, data_nascimento=None, nota_primeiro_semestre=None, nota_segundo_semestre=None, turma_id=None):
         self.nome = nome
         self.idade = idade
         self.data_nascimento = data_nascimento
         self.nota_primeiro_semestre = nota_primeiro_semestre
         self.nota_segundo_semestre = nota_segundo_semestre
         self.media_final = None if not (nota_primeiro_semestre and nota_segundo_semestre) else (nota_primeiro_semestre + nota_segundo_semestre) / 2
+        self.turma_id = turma_id  # Adicione esta linha
 
     def to_dict(self):
         return {
@@ -33,6 +34,7 @@ class Aluno(db.Model):
             'media_final': self.media_final,
             'turma_id': self.turma_id
         }
+
     
 class AlunoNaoEncontrado(Exception):
     pass
@@ -54,10 +56,11 @@ def adicionar_aluno(aluno_data):
         data_nascimento=aluno_data.get('data_nascimento'),
         nota_primeiro_semestre=aluno_data.get('nota_primeiro_semestre'),
         nota_segundo_semestre=aluno_data.get('nota_segundo_semestre'),
-        turma_id=aluno_data.get('turma_id')
+        turma_id=aluno_data.get('turma_id')  # Isso agora funcionará corretamente
     )
     db.session.add(novo_aluno)
     db.session.commit()
+
 
 def atualizar_aluno(id_aluno, novos_dados):
     aluno = Aluno.query.get(id_aluno)
