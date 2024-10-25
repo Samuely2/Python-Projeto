@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify,render_template,redirect, url_for
 
-from .alunos_model import AlunoNaoEncontrado, listar_alunos, aluno_por_id, adicionar_aluno, atualizar_aluno, excluir_aluno
+from models.alunos import AlunoNaoEncontrado, listar_alunos, aluno_por_id, adicionar_aluno, atualizar_aluno, excluir_aluno
 from config import db
 
 alunos_blueprint = Blueprint('alunos', __name__)
