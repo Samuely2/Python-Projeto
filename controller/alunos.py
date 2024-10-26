@@ -18,7 +18,7 @@ def get_alunos():
 def get_aluno(id_aluno):
     try:
         aluno = aluno_por_id(id_aluno)
-        return render_template('aluno_id.html', aluno=aluno)
+        return render_template('alunos/aluno_id.html', aluno=aluno)
     except AlunoNaoEncontrado:
         return jsonify({'message': 'Aluno não encontrado'}), 404
 

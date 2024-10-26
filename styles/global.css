@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+
+
+
+
+body {
+    background-color: rgb(141, 141, 214);  
+    font-family: "Signika", sans-serif;
+    text-decoration: none;
+    
+}
+.title {
+    text-align: center;
+}
+
+
+
