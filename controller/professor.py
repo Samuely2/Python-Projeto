@@ -4,9 +4,9 @@ from models.professor import ProfessorNaoEncontrado, listar_professores, profess
 professor_blueprint = Blueprint('professor', __name__)
 
 # ROTA PRINCIPAL PARA PROFESSORES
-@professor_blueprint.route('/professores', methods=["GET"])
-def main():
-     return render_template("professores/professores.html")
+#@professor_blueprint.route('/professoresprincipal', methods=["GET"])
+#def main():
+ #    return render_template("professores/professores.html")
 
 # ROTA PARA LISTAR TODOS OS PROFESSORES
 @professor_blueprint.route('/professores', methods=['GET'])

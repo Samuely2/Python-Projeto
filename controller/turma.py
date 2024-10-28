@@ -19,7 +19,7 @@ def get_turmas():
 def get_turma(id_turma):
     try:
         turma = turma_por_id(id_turma)
-        return render_template('turma_id.html', turma=turma)
+        return render_template('/turma/turma_id.html', turma=turma)
     except TurmaNaoEncontrada:
         return jsonify({'message': 'Turma não encontrada'}), 404
 

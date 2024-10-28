@@ -21,7 +21,7 @@ class Aluno(db.Model):
         self.nota_primeiro_semestre = nota_primeiro_semestre
         self.nota_segundo_semestre = nota_segundo_semestre
         self.media_final = None if not (nota_primeiro_semestre and nota_segundo_semestre) else (nota_primeiro_semestre + nota_segundo_semestre) / 2
-        self.turma_id = turma_id  # Adicione esta linha
+        self.turma_id = turma_id 
 
     def to_dict(self):
         return {
@@ -56,7 +56,7 @@ def adicionar_aluno(aluno_data):
         data_nascimento=aluno_data.get('data_nascimento'),
         nota_primeiro_semestre=aluno_data.get('nota_primeiro_semestre'),
         nota_segundo_semestre=aluno_data.get('nota_segundo_semestre'),
-        turma_id=aluno_data.get('turma_id')  # Isso agora funcionará corretamente
+        turma_id=aluno_data.get('turma_id')
     )
     db.session.add(novo_aluno)
     db.session.commit()

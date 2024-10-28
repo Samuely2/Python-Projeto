@@ -10,15 +10,65 @@
   <title>Lista de Alunos</title>
 </head>
 
+<style>
+ @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+ @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap");
+
+html {
+  list-style-type: none;
+}
+
+body {
+    background-color: rgb(128, 128, 136);  
+    font-family: "Signika", sans-serif;
+    text-decoration: none;   
+}
+h1 {
+  color: white;
+}
+li{
+  list-style: none;
+  
+}
+a{
+  text-decoration: none;
+  color: white;
+}
+a:hover {
+  color: rgb(232, 150, 50);
+}
+.containerLista {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+.lista {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.listafilho {
+  display: flex;
+  justify-content: center;
+  text-align: start;
+  width: 50%;
+}
+</style>
+
 <body>
+<div class="containerLista">
   <h1>Lista de Alunos</h1>
+  <div class="lista">
+    <div class="listafilho">
   <ul>
     {% for aluno in alunos %}
     <li><a href="{{ url_for('alunos.get_aluno', id_aluno=aluno.id) }}">{{ aluno.nome }} (ID: {{ aluno.id }})</a></li>
     {% endfor %}
   </ul>
-
-
+</div>
+</div>
+</div>
 </body>
 
 </html>
