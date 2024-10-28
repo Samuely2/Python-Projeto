@@ -9,13 +9,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adicionar Aluno</title>
 </head>
+<style>
+  .header {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+    
+  }
+  .containerForm {
+    display: flex;
+    justify-content: center;
+  }
+  h1{
+    color: white;
+  }
+  #nome {
+    width: 50%;
+  }
+  .NameAluno {
+    color: rgb(255, 255, 255);
+  }
 
+</style>
 <body>
-  <h1>Adicionar Aluno</h1>
-  <form action="{{ url_for('alunos.create_aluno') }}" method="post">
-    <label for="nome">Nome:</label><br>
+  <div class="header"><h1>Adicionar Aluno</h1></div>
+  <div class="containerForm">
+  <form action="{{ url_for('alunos.create_aluno') }}" class="form" method="post">
+    <label for="nome" class="NameAluno">Nome do aluno:</label><br>
     <input type="text" id="nome" name="nome"><br>
-    <input type="submit" value="Adicionar Aluno">
+    <input type="submit" id="submit" value="Adicionar Aluno">
   </form>
+</div>
 </body>
 </html>
