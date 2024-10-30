@@ -8,8 +8,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editar Turma</title>
 </head>
+<style>
+ @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+ @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap");
 
+html {
+  list-style-type: none;
+}
+
+body {
+    background-color: rgb(128, 128, 136);  
+    font-family: "Signika", sans-serif;
+    text-decoration: none;   
+}
+
+body {
+  background-color: rgb(128, 128, 136); 
+}
+
+.containerPai {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  
+}
+.containerFilho {
+  display: flex;
+  flex-direction: column;
+}
+#turma {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+h1{
+  color: white;
+}
+
+</style>
 <body>
+  <div class="containerPai">
+    <div class="containerFilho">
   <h1>Editar Turma</h1>
   <form action="{{ url_for('turma.update_turma', id_turma=turma.id) }}" method="POST">
     <label for="descricao">Descrição:</label>
@@ -23,7 +62,9 @@
     
     <button type="submit">Atualizar Turma</button>
   </form>
-  <a href="{{ url_for('turma.get_turma', id_turma=turma.id) }}">Voltar aos detalhes da turma</a>
+  <a id="turma" href="{{ url_for('turma.get_turma', id_turma=turma.id) }}">Voltar aos detalhes da turma</a>
+</div>
+</div>
 </body>
 
 </html>

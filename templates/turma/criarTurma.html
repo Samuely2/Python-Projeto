@@ -8,22 +8,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adicionar Turma</title>
 </head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap");
 
+body {
+    background-color: rgb(128, 128, 136);  
+    font-family: "Signika", sans-serif;
+    text-decoration: none;
+    
+}
+  
+  .containerPai {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .filho {
+    display: flex;
+    flex-direction: column;
+  }
+  body {
+    background-color: rgb(128, 128, 136);  
+  }
+  h1 {
+    color: white;
+  }
+  a{
+    text-decoration: none;
+    color: rgb(7, 76, 126);
+  }
+  .lista-turma {
+    display: flex;
+    margin-top: 20px;
+    justify-content: end;
+    font-weight: 700;
+  }
+  a:hover {
+    color: rgb(142, 202, 202);
+  }
+  #text {
+    color: white;
+  }
+</style>
 <body>
-  <h1>Adicionar Nova Turma</h1>
-  <form action="{{ url_for('turma.create_turma') }}" method="POST">
-    <label for="descricao">Descrição:</label>
-    <input type="text" id="descricao" name="descricao" required>
-    
-    <label for="professor_id">Professor ID:</label>
-    <input type="number" id="professor_id" name="professor_id" required>
-    
-    <label for="ativo">Ativa:</label>
-    <input type="checkbox" id="ativo" name="ativo">
-    
-    <button type="submit">Adicionar Turma</button>
-  </form>
-  <a href="{{ url_for('turma.get_turmas') }}">Voltar à lista de turmas</a>
-</body>
+  <div class="containerPai">
+    <div class="filho">
+    <h1>Adicionar Nova Turma</h1>
+    <form action="{{ url_for('turma.create_turma') }}" method="POST">
+      <label for="descricao" id="text">Descrição:</label>
+      <input type="text" name="descricao" required>
+      
+      <label for="professor_id" id="text">Professor ID:</label>
+      <input type="number" name="professor_id" required>
+      
+      <label for="ativo" id="text">Ativa:</label>
+      <input type="checkbox" id="ativo" name="ativo">
+      
+      <button type="submit">Adicionar Turma</button>
+    </form>
+    <div class="lista-turma">
+    <a href="{{ url_for('turma.get_turmas') }}">Voltar à lista de turmas</a>
+  </div>
+  </body>
+  </div>
+</div>
 
 </html>

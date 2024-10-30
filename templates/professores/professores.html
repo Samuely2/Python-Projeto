@@ -7,13 +7,49 @@
     <link rel="stylesheet" href="/styles/global.css">
     <link rel="stylesheet" href="/styles/reset.css">
 </head>
+<style>
+h1 {
+    color: white;
+    
+}
+.containerProfessores {
+    display: flex;
+    flex-direction: column;
+}
+.containerPai {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+ul {
+    color: white;
+    padding: 0px;
+}
+a {
+    text-decoration: none;
+    color: orange;
+}
+a:hover {
+    color: aliceblue;
+}
+
+
+
+
+</style>
+
+
 <body>
-    <h1>Lista de Professores</h1>
-    <ul>
-        {% for professor in professores %}
-        <li><a href="{{ url_for('professor.get_professor', id_professor=professor.id) }}">{{ professor.nome }} (ID: {{ professor.id }})</a></li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('professor.adicionar_professor_page') }}">Adicionar Novo Professor</a>
+    <div class="containerPai">
+        <div class="containerProfessores">
+        <h1>Lista de Professores</h1>
+        <ul>
+            {% for professor in professores %}
+            <li><a href="{{ url_for('professor.get_professor', id_professor=professor.id) }}">{{ professor.nome }} (ID: {{ professor.id }})</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('professor.adicionar_professor_page') }}">Adicionar Novo Professor</a>
+        </div>
+    </div>
 </body>
 </html>

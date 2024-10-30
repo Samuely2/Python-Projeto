@@ -8,15 +8,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista de Turmas</title>
 </head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap");
 
+body {
+    background-color: rgb(128, 128, 136);  
+    font-family: "Signika", sans-serif;
+    text-decoration: none;
+    
+}
+h1 {
+  color: white;
+}
+
+.containerPai {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.containerFilho {
+  display: flex;
+  flex-direction: column;
+}
+a {
+  text-decoration: none;
+  
+}
+a:hover {
+  color: aquamarine;
+}
+ul {
+  color: white;
+}
+#adicionar 
+{
+  color: chocolate;
+}
+#desc {
+  color: cornflowerblue;
+}
+
+
+</style>
 <body>
+  <div class="containerPai">
+    <div class="containerFilho">
   <h1>Lista de Turmas</h1>
   <ul>
     {% for turma in turmas %}
-    <li><a href="{{ url_for('turma.get_turma', id_turma=turma.id) }}">{{ turma.descricao }} (ID: {{ turma.id }})</a></li>
+    <li><a id="desc" href="{{ url_for('turma.get_turma', id_turma=turma.id) }}">{{ turma.descricao }} (ID: {{ turma.id }})</a></li>
     {% endfor %}
   </ul>
-  <a href="{{ url_for('turma.adicionar_turma_page') }}">Adicionar nova turma</a>
+  <a href="{{ url_for('turma.adicionar_turma_page') }}" id="adicionar">Adicionar nova turma</a>
+  </div>
+</div>
 </body>
-
 </html>

@@ -61,7 +61,6 @@ def adicionar_aluno(aluno_data):
     db.session.add(novo_aluno)
     db.session.commit()
 
-
 def atualizar_aluno(id_aluno, novos_dados):
     aluno = Aluno.query.get(id_aluno)
     if not aluno:
