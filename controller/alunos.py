@@ -3,10 +3,9 @@ from models.alunos import AlunoNaoEncontrado, listar_alunos, aluno_por_id, adici
 
 alunos_blueprint = Blueprint('alunos', __name__)
 
-# ROTA PRINCIPAL PARA ALUNOS
 @alunos_blueprint.route('/', methods=['GET'])
-def get_index():
-    return render_template("index.html")  # Se houver um template de index
+def getIndex():
+    return "Meu index"
 
 # ROTA PARA LISTAR TODOS OS ALUNOS
 @alunos_blueprint.route('/alunos', methods=['GET'])
@@ -40,7 +39,6 @@ def create_aluno():
             'nota_segundo_semestre': float(request.form.get('nota_segundo_semestre', 0)),
             'turma_id': int(request.form.get('turma_id'))
         }
-
         adicionar_aluno(novo_aluno)
         return redirect(url_for('alunos.get_alunos'))
     except ValueError:
