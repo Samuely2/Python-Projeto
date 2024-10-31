@@ -3,11 +3,6 @@ from models.professor import ProfessorNaoEncontrado, listar_professores, profess
 
 professor_blueprint = Blueprint('professor', __name__)
 
-# ROTA PRINCIPAL PARA PROFESSORES
-#@professor_blueprint.route('/professoresprincipal', methods=["GET"])
-#def main():
- #    return render_template("professores/professores.html")
-
 # ROTA PARA LISTAR TODOS OS PROFESSORES
 @professor_blueprint.route('/professores', methods=['GET'])
 def get_professores():
@@ -32,9 +27,9 @@ def adicionar_professor_page():
 @professor_blueprint.route('/professores', methods=['POST'])
 def create_professor():
     nome = request.form['nome']
-    idade = request.form['idade']
-    materia = request.form['materia']
-    observacoes = request.form['observacoes']
+    idade = request.form.get('idade')  # Use get para evitar KeyError
+    materia = request.form.get('materia')
+    observacoes = request.form.get('observacoes')
     novo_professor = {
         'nome': nome,
         'idade': idade,
@@ -59,9 +54,9 @@ def update_professor(id_professor):
     try:
         novos_dados = {
             'nome': request.form['nome'],
-            'idade': request.form['idade'],
-            'materia': request.form['materia'],
-            'observacoes': request.form['observacoes']
+            'idade': request.form.get('idade'),  # Use get para evitar KeyError
+            'materia': request.form.get('materia'),
+            'observacoes': request.form.get('observacoes')
         }
         atualizar_professor(id_professor, novos_dados)
         return redirect(url_for('professor.get_professor', id_professor=id_professor))

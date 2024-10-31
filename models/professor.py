@@ -5,9 +5,9 @@ class Professor(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
-    idade = db.Column(db.Integer)
-    materia = db.Column(db.String(100))
-    observacoes = db.Column(db.Text)
+    idade = db.Column(db.Integer, nullable=True)
+    materia = db.Column(db.String(100), nullable=True)
+    observacoes = db.Column(db.Text, nullable=True)
     
     turmas = db.relationship('Turma', back_populates='professor')
 
