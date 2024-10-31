@@ -1,5 +1,12 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
-from models.professor import ProfessorNaoEncontrado, listar_professores, professor_por_id, adicionar_professor, atualizar_professor, excluir_professor
+from models.professor import (
+    ProfessorNaoEncontrado,
+    listar_professores,
+    professor_por_id,
+    adicionar_professor,
+    atualizar_professor,
+    excluir_professor
+)
 
 professor_blueprint = Blueprint('professor', __name__)
 
@@ -26,18 +33,26 @@ def adicionar_professor_page():
 # ROTA PARA CRIAR UM NOVO PROFESSOR
 @professor_blueprint.route('/professores', methods=['POST'])
 def create_professor():
-    nome = request.form['nome']
-    idade = request.form.get('idade')  # Use get para evitar KeyError
-    materia = request.form.get('materia')
-    observacoes = request.form.get('observacoes')
-    novo_professor = {
-        'nome': nome,
-        'idade': idade,
-        'materia': materia,
-        'observacoes': observacoes
-    }
-    adicionar_professor(novo_professor)
-    return redirect(url_for('professor.get_professores'))
+    try:
+        nome = request.form['nome']
+        idade = request.form.get('idade')
+        materia = request.form.get('materia')
+        observacoes = request.form.get('observacoes')
+
+        # Validação simples
+        if not nome or not idade.isdigit():
+            raise ValueError("Nome e idade são obrigatórios e idade deve ser um número.")
+
+        novo_professor = {
+            'nome': nome,
+            'idade': int(idade),  # Converter para inteiro
+            'materia': materia,
+            'observacoes': observacoes
+        }
+        adicionar_professor(novo_professor)
+        return redirect(url_for('professor.get_professores'))
+    except ValueError as e:
+        return jsonify({'message': str(e)}), 400
 
 # ROTA PARA EXIBIR FORMULÁRIO PARA EDITAR UM PROFESSOR
 @professor_blueprint.route('/professores/<int:id_professor>/editar', methods=['GET'])
@@ -54,14 +69,26 @@ def update_professor(id_professor):
     try:
         novos_dados = {
             'nome': request.form['nome'],
-            'idade': request.form.get('idade'),  # Use get para evitar KeyError
+            'idade': request.form.get('idade'),
             'materia': request.form.get('materia'),
             'observacoes': request.form.get('observacoes')
         }
-        atualizar_professor(id_professor, novos_dados)
+
+        # Validação simples
+        if not novos_dados['nome'] or not novos_dados['idade'].isdigit():
+            raise ValueError("Nome e idade são obrigatórios e idade deve ser um número.")
+
+        atualizar_professor(id_professor, {
+            'nome': novos_dados['nome'],
+            'idade': int(novos_dados['idade']),  # Converter para inteiro
+            'materia': novos_dados['materia'],
+            'observacoes': novos_dados['observacoes']
+        })
         return redirect(url_for('professor.get_professor', id_professor=id_professor))
     except ProfessorNaoEncontrado:
         return jsonify({'message': 'Professor não encontrado'}), 404
+    except ValueError as e:
+        return jsonify({'message': str(e)}), 400
 
 # ROTA PARA DELETAR UM PROFESSOR
 @professor_blueprint.route('/professores/delete/<int:id_professor>', methods=['POST'])

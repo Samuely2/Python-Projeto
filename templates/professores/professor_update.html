@@ -1,87 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="stylesheet" href="global.css">
-  <link rel="stylesheet" href="/styles/reset.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editar Professor</title>
+  <link rel="stylesheet" href="/styles/global.css">
+  <link rel="stylesheet" href="/styles/reset.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
-
+    html {
+      list-style-type: none;
+    }
     body {
       background-color: rgb(128, 128, 136);
       font-family: "Signika", sans-serif;
-      color: white;
+      margin: 0;
+      padding: 0;
     }
-
-    h1 {
+    h1, p {
       text-align: center;
-      margin-top: 20px;
+      color: white;
+      margin-top: 0;
     }
-
-    .container {
+    .containerPrincipal {
       display: flex;
       flex-direction: column;
+      width: 100%;
       align-items: center;
-      margin-top: 20px;
     }
-
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    .back {
+      padding-top: 20px;
+    }
+    a:hover {
+      color: rgb(232, 150, 50);
+    }
+    .buttonContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+    }
+    .containerGeral {
+      display: flex;
+      flex-direction: column;
+      background-color: rgb(59, 130, 178);
+      border-radius: 40px;
+      margin: 40px;
+      align-items: center;
+      padding: 20px;
+    }
+    .voltar {
+      display: flex;
+      justify-content: end;
+    }
+    .formContainer {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      gap: 20px;
+    }
     label {
-      margin: 10px 0;
+      margin: 0;
+      padding: 0;
     }
-
-    input {
-      padding: 5px;
-      margin-bottom: 20px;
-      width: 300px; /* Ajustando a largura do input */
+    input[type="text"], input[type="number"], input[type="date"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
-
     button {
       padding: 10px 20px;
-      background-color: rgb(49, 94, 176);
+      background-color: #4CAF50;
       color: white;
       border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
-
     button:hover {
-      background-color: rgb(142, 202, 202);
-    }
-
-    .btn-voltar {
-      margin-top: 20px;
-      text-decoration: none;
-      color: rgb(7, 76, 126);
-    }
-
-    .btn-voltar:hover {
-      color: rgb(142, 202, 202);
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="containerGeral">
     <h1>Editar Professor: {{ professor.nome }}</h1>
-    <form action="{{ url_for('professores.update_professor', id_professor=professor.id) }}" method="POST">
-      <label for="nome">Nome:</label>
-      <input type="text" name="nome" value="{{ professor.nome }}" required>
-      
-      <label for="email">E-mail:</label>
-      <input type="email" name="email" value="{{ professor.email }}" required>
-      
-      <label for="idade">Idade:</label>
-      <input type="number" name="idade" value="{{ professor.idade }}" required>
-      
-      <label for="data_nascimento">Data de Nascimento:</label>
-      <input type="date" name="data_nascimento" value="{{ professor.data_nascimento }}" required>
-      
-      <label for="disciplina">Disciplina:</label>
-      <input type="text" name="disciplina" value="{{ professor.disciplina }}" required>
-      
-      <button type="submit">Atualizar Professor</button>
-    </form>
-    <a href="{{ url_for('professores.get_professores') }}" class="btn-voltar">Voltar à lista de professores</a>
+    <div class="containerPrincipal">
+      <form class="formContainer" action="{{ url_for('professor.update_professor', id_professor=professor.id) }}" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="{{ professor.nome }}" required>
+
+        <label for="idade">Idade:</label>
+        <input type="number" id="idade" name="idade" value="{{ professor.idade }}" required>
+
+        <label for="materia">Matéria:</label>
+        <input type="text" id="materia" name="materia" value="{{ professor.materia }}" required>
+
+        <label for="observacoes">Observações:</label>
+        <input type="text" id="observacoes" name="observacoes" value="{{ professor.observacoes }}">
+
+        <button type="submit">Atualizar Professor</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="voltar">
+    <a class="back" href="{{ url_for('professor.get_professores') }}">Voltar para a lista de professores</a>
   </div>
 </body>
 </html>

@@ -1,4 +1,5 @@
 from config import db
+from models.professor import buscar_professor_por_id
 
 class Turma(db.Model):
     __tablename__ = 'turmas'
@@ -19,10 +20,13 @@ class Turma(db.Model):
 class TurmaNaoEncontrada(Exception):
     pass
 
+class ProfessorNaoEncontrado(Exception):
+    pass
+
 def turma_por_id(id_turma):
     turma = Turma.query.get(id_turma)
     if not turma:
-        raise TurmaNaoEncontrada
+        raise TurmaNaoEncontrada(f"Turma com ID {id_turma} não encontrada.")
     return {
         'id': turma.id,
         'descricao': turma.descricao,
@@ -43,26 +47,64 @@ def listar_turmas():
     } for turma in turmas]
 
 def adicionar_turma(turma_data):
+    """Adiciona uma nova turma ao banco de dados."""
+    # Verifica se o ID do professor existe
+    professor = buscar_professor_por_id(turma_data['professor_id'])
+    if professor is None:
+        raise ProfessorNaoEncontrado(f"Professor com ID {turma_data['professor_id']} não encontrado.")
+
+    # Se o professor existe, cria a nova turma
     nova_turma = Turma(
         descricao=turma_data['descricao'],
         professor_id=turma_data['professor_id'],
         ativo=turma_data.get('ativo', True)
     )
-    db.session.add(nova_turma)
-    db.session.commit()
+
+    try:
+        db.session.add(nova_turma)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()  # Reverte em caso de erro
+        raise e  # Relança a exceção para tratamento posterior
 
 def atualizar_turma(id_turma, novos_dados):
+    """Atualiza os dados de uma turma existente."""
     turma = Turma.query.get(id_turma)
     if not turma:
-        raise TurmaNaoEncontrada
+        raise TurmaNaoEncontrada(f"Turma com ID {id_turma} não encontrada.")
+    
+    # Verifica se o novo professor existe
+    if 'professor_id' in novos_dados:
+        professor = buscar_professor_por_id(novos_dados['professor_id'])
+        if professor is None:
+            raise ProfessorNaoEncontrado(f"Professor com ID {novos_dados['professor_id']} não encontrado.")
+
     turma.descricao = novos_dados.get('descricao', turma.descricao)
     turma.professor_id = novos_dados.get('professor_id', turma.professor_id)
     turma.ativo = novos_dados.get('ativo', turma.ativo)
-    db.session.commit()
+    
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
 
 def excluir_turma(id_turma):
+    """Remove uma turma do banco de dados."""
     turma = Turma.query.get(id_turma)
     if not turma:
-        raise TurmaNaoEncontrada
-    db.session.delete(turma)
-    db.session.commit()
+        raise TurmaNaoEncontrada(f"Turma com ID {id_turma} não encontrada.")
+    
+    try:
+        db.session.delete(turma)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
+
+def buscar_turma_por_id(id_turma):
+    """Busca uma turma pelo seu ID."""
+    turma = Turma.query.get(id_turma)
+    if not turma:
+        raise TurmaNaoEncontrada(f"Turma com ID {id_turma} não encontrada.")
+    return turma

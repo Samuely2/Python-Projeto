@@ -1,5 +1,6 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for
+from flask import Blueprint, flash, request, jsonify, render_template, redirect, url_for
 from models.alunos import AlunoNaoEncontrado, listar_alunos, aluno_por_id, adicionar_aluno, atualizar_aluno, excluir_aluno
+from models.turma import buscar_turma_por_id
 
 alunos_blueprint = Blueprint('alunos', __name__)
 
@@ -28,22 +29,37 @@ def adicionar_aluno_page():
     return render_template('alunos/criarAlunos.html')
 
 # ROTA PARA CRIAR UM NOVO ALUNO
+from flask import jsonify, request, redirect, url_for
+from werkzeug.exceptions import NotFound
+
 @alunos_blueprint.route('/alunos', methods=['POST'])
 def create_aluno():
     try:
+        turma_id = int(request.form.get('turma_id'))
+
+        # Verifica se a turma existe no banco de dados
+        turma = buscar_turma_por_id(turma_id)
+        if not turma:
+            return jsonify({'message': f'A turma com ID {turma_id} não existe.'}), 404
+
+        # Caso a turma exista, prossegue com a criação do aluno
         novo_aluno = {
             'nome': request.form['nome'],
             'idade': int(request.form['idade']),
             'data_nascimento': request.form.get('data_nascimento'),
             'nota_primeiro_semestre': float(request.form.get('nota_primeiro_semestre', 0)),
             'nota_segundo_semestre': float(request.form.get('nota_segundo_semestre', 0)),
-            'turma_id': int(request.form.get('turma_id'))
+            'turma_id': turma_id
         }
+
+        # Função para adicionar aluno ao banco
         adicionar_aluno(novo_aluno)
+
         # Redireciona para a lista de alunos após a criação bem-sucedida
         return redirect(url_for('alunos.get_alunos'))
     except ValueError:
-        return jsonify({'message': 'Dados inválidos fornecidos'}), 400
+        flash('Dados inválidos fornecidos', 'error')
+        return redirect(url_for('alunos.get_aluno_form'))
 
 
 # ROTA PARA EXIBIR FORMULÁRIO PARA EDITAR UM ALUNO
@@ -73,6 +89,11 @@ def update_aluno(id_aluno):
             turma_id = int(turma_id)
         else:
             raise ValueError("Turma ID não pode ser vazio")
+
+        # Verifica se a turma existe no banco de dados
+        turma = buscar_turma_por_id(turma_id)
+        if not turma:
+            return jsonify({'message': f'A turma com ID {turma_id} não existe.'}), 404
 
         # Converter data_nascimento de string para date, caso seja fornecida
         data_nascimento_str = request.form.get('data_nascimento')

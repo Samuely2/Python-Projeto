@@ -69,3 +69,7 @@ def excluir_professor(id_professor):
         raise ProfessorNaoEncontrado
     db.session.delete(professor)
     db.session.commit()
+
+def buscar_professor_por_id(id_professor):
+    professor = Professor.query.get(id_professor)
+    return professor
