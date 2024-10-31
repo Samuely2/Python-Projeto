@@ -6,7 +6,7 @@ alunos_blueprint = Blueprint('alunos', __name__)
 
 @alunos_blueprint.route('/', methods=['GET'])
 def getIndex():
-    return "Meu index"
+    return render_template("index.html")
 
 # ROTA PARA LISTAR TODOS OS ALUNOS
 @alunos_blueprint.route('/alunos', methods=['GET'])
