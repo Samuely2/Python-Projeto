@@ -40,9 +40,11 @@ def create_aluno():
             'turma_id': int(request.form.get('turma_id'))
         }
         adicionar_aluno(novo_aluno)
+        # Redireciona para a lista de alunos após a criação bem-sucedida
         return redirect(url_for('alunos.get_alunos'))
     except ValueError:
         return jsonify({'message': 'Dados inválidos fornecidos'}), 400
+
 
 # ROTA PARA EXIBIR FORMULÁRIO PARA EDITAR UM ALUNO
 @alunos_blueprint.route('/alunos/<int:id_aluno>/editar', methods=['GET'])
@@ -53,31 +55,49 @@ def editar_aluno_page(id_aluno):
     except AlunoNaoEncontrado:
         return jsonify({'message': 'Aluno não encontrado'}), 404
 
+from datetime import datetime
+
 @alunos_blueprint.route('/alunos/<int:id_aluno>', methods=['POST'])
 def update_aluno(id_aluno):
     try:
+        # Validar e converter a idade
         idade = request.form.get('idade')
         if idade is not None and idade.strip():
             idade = int(idade)
         else:
             raise ValueError("Idade não pode ser vazia")
 
+        # Validar e converter o ID da turma
         turma_id = request.form.get('turma_id')
         if turma_id is not None and turma_id.strip():
             turma_id = int(turma_id)
         else:
             raise ValueError("Turma ID não pode ser vazio")
 
+        # Converter data_nascimento de string para date, caso seja fornecida
+        data_nascimento_str = request.form.get('data_nascimento')
+        if data_nascimento_str:
+            try:
+                data_nascimento = datetime.strptime(data_nascimento_str, '%Y-%m-%d').date()
+            except ValueError:
+                raise ValueError("Data de Nascimento deve estar no formato YYYY-MM-DD")
+        else:
+            data_nascimento = None
+
+        # Montar o dicionário com os novos dados
         novos_dados = {
             'nome': request.form['nome'],
             'idade': idade,
-            'data_nascimento': request.form.get('data_nascimento'),
+            'data_nascimento': data_nascimento,  # Passa o objeto date aqui
             'nota_primeiro_semestre': float(request.form.get('nota_primeiro_semestre', 0)),
             'nota_segundo_semestre': float(request.form.get('nota_segundo_semestre', 0)),
             'turma_id': turma_id
         }
+
+        # Chamar a função para atualizar o aluno
         atualizar_aluno(id_aluno, novos_dados)
         return redirect(url_for('alunos.get_aluno', id_aluno=id_aluno))
+
     except AlunoNaoEncontrado:
         return jsonify({'message': 'Aluno não encontrado'}), 404
     except ValueError as ve:

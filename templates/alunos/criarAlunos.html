@@ -89,7 +89,8 @@
   <div class="containerGeral">
     <h1>Adicionar Aluno</h1>
     <div class="containerPrincipal">
-      <form class="formContainer" action="{{ url_for('alunos.get_aluno', id_aluno=aluno.id) }}" method="POST">
+      <!-- Ação alterada para enviar dados para a rota de criação de aluno -->
+      <form class="formContainer" action="{{ url_for('alunos.create_aluno') }}" method="POST">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
 
