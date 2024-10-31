@@ -18,11 +18,14 @@
 body {
     background-color: rgb(128, 128, 136);  
     font-family: "Signika", sans-serif;
-    text-decoration: none;   
+    text-decoration: none; 
+    margin: 0;
+    padding: 0;  
 }
   h1, p {
     text-align: center;
     color: white;
+    margin-top: 0px;
   }
   .containerPrincipal {
     display: flex;
@@ -33,10 +36,7 @@ body {
   text-decoration: none;
   color: white;
 
-  }
-  #nome {
-    color: rgb(239, 141, 49);
-  }
+  } 
 
 .pushable {
   position: relative;
@@ -123,29 +123,56 @@ body {
   outline: none;
 }
 .back {
-  padding-top: 50px;
+  padding-top: 20px;
 }
 a:hover {
   color: rgb(232, 150, 50);
 }
-#delete-form {
-  padding-top: 50px;
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+.containerGeral {
+  background-color: rgb(59, 130, 178);
+  border-radius: 40px;
+  margin-top: 10px;
+  margin: 40px;
+  padding: 20px;
+}
+.voltar {
+  display: flex;
+  justify-content: end;
 }
 </style>
 
 
 <body>
+  <div class="containerGeral">
   <h1>Detalhes do Aluno</h1>
 <div class="containerPrincipal">
-  <p><strong>ID:</strong> {{ aluno.id }}</p>
-  <p><strong id="nome">Nome:</strong> {{ aluno.nome }}</p>
+  <p id="nomeP"><strong id="nome">Nome:</strong> {{ aluno.nome }} <strong>(ID:</strong> {{aluno.id}})</p>
+  <div class="buttonContainer">
   <form id="delete-form" action="{{ url_for('alunos.delete_aluno', id_aluno=aluno.id) }}" method="POST">
     <input type="hidden" name="_method" value="DELETE">
     <button class="pushable" type="submit">Excluir Aluno
     <span class="shadow"></span><span class="edge"></span>
     <span class="front">Excluir Aluno</span></button>
   </form>
+  <form id="edit-form" action="{{ url_for('alunos.editar_aluno_page', id_aluno=aluno.id) }}" method="GET">
+    <button class="pushable" type="submit">Editar Aluno
+        <span class="shadow"></span><span class="edge"></span>
+        <span class="front">Editar Aluno</span>
+    </button>
+</form>
+
+
+</div>
+</div>
+  <div class="voltar">
   <a class="back" href="{{ url_for('alunos.get_alunos') }}">Voltar para a lista de alunos</a>
+</div>
 </div>
 
 </body>

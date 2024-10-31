@@ -11,12 +11,15 @@
 <style>
   h1{
     color: white;
+    text-align: center;
   }
   .containerPai {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: row;
     gap: 30px;
+    border-bottom: 1px solid rgb(49, 94, 176);
+    border-top: 1px solid rgb(49, 94, 176);
   }
   .containerFilho {
     display: flex;
@@ -30,6 +33,11 @@
     text-decoration: none;
     color: white;
   }
+  .lista {
+    display: flex;
+    justify-content: end;
+    margin-top: 30px;
+  }
   .id {
     display: flex;
     flex-direction: column;
@@ -37,8 +45,8 @@
 </style>
 
 <body>
+  <h1>Detalhes do Professor</h1>
   <div class="containerPai">
-    <h1>Detalhes do Professor</h1>
     <div class="containerFilho"><div class="id"><p><strong>ID:</strong> {{ professor.id }}</p></div></div>
     <p><strong>Nome:</strong> {{ professor.nome }}</p>
     <p><strong>Idade:</strong> {{ professor.idade }}</p>

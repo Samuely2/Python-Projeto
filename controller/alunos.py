@@ -27,14 +27,6 @@ def get_aluno(id_aluno):
 def adicionar_aluno_page():
     return render_template('alunos/criarAlunos.html')
 
-# ROTA PARA CRIAR UM NOVO ALUNO
-@alunos_blueprint.route('/alunos', methods=['POST'])
-def create_aluno():
-    nome = request.form['nome']
-    novo_aluno = {'nome': nome}
-    adicionar_aluno(novo_aluno)
-    return redirect(url_for('alunos.get_alunos'))
-
 # ROTA PARA EXIBIR FORMULÁRIO PARA EDITAR UM ALUNO
 @alunos_blueprint.route('/alunos/<int:id_aluno>/editar', methods=['GET'])
 def editar_aluno_page(id_aluno):
