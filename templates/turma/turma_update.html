@@ -9,10 +9,16 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap');
 
-    body {
+    body {  
       background-color: rgb(128, 128, 136);
       font-family: "Signika", sans-serif;
       color: white;
+      background-color: #9aa3a8;  
+      background-image: url("{{ url_for('static', filename='img/satoro.png') }}");   
+      background-size: 100%;
+      background-repeat: no-repeat; 
+      background-position: center; 
+      background-attachment: fixed; 
     }
 
     h1 {
@@ -24,7 +30,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 20px;
+      margin-top: 10%;
+      background-color: rgba(128, 128, 128, 0.5);  
     }
 
     label {

@@ -13,6 +13,12 @@
     body {
       background-color: rgb(128, 128, 136);
       font-family: "Signika", sans-serif;
+      background-color: #9aa3a8;  
+      background-image: url("{{ url_for('static', filename='img/satoro.png') }}");   
+      background-size: 100%;
+      background-repeat: no-repeat; 
+      background-position: center; 
+      background-attachment: fixed; 
       margin: 0;
       padding: 0;
     }
@@ -45,8 +51,8 @@
     }
     .containerGeral {
       display: flex;
-      flex-direction: column;
-      background-color: rgb(59, 130, 178);
+      flex-direction: column;   
+      background-color: rgba(128, 128, 128, 0.5);  
       border-radius: 40px;
       margin: 40px;
       align-items: center;

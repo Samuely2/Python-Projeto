@@ -1,94 +1,149 @@
-import requests
 import unittest
+from app import app, db
+from models.alunos import adicionar_aluno, listar_alunos, aluno_por_id, atualizar_aluno, excluir_aluno, Aluno
+from models.professor import adicionar_professor, listar_professores, professor_por_id, atualizar_professor, excluir_professor, Professor
+from models.turma import adicionar_turma, listar_turmas, turma_por_id, atualizar_turma, excluir_turma, Turma
 
-class TestAPI(unittest.TestCase):
+class TesteProjeto(unittest.TestCase):
 
-    BASE_URL = 'http://127.0.0.1:8000'
+    @classmethod
+    def setUpClass(cls):
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+        cls.client = app.test_client()
+        db.create_all()
+
+    @classmethod
+    def tearDownClass(cls):
+        db.session.remove()
+        db.drop_all()
 
     def setUp(self):
-        """Reseta o banco de dados antes de cada teste."""
-        r_reset = requests.post(f'{self.BASE_URL}/reseta')
-        self.assertEqual(r_reset.status_code, 200)
+        self.client = app.test_client()
+        db.session.query(Aluno).delete()  
+        db.session.query(Turma).delete()  
+        db.session.query(Professor).delete()  
+        db.session.commit()
+        self.criar_professor_padrao()
+        self.criar_turma_padrao()
 
-    def tearDown(self):
-        """Reseta o banco de dados após cada teste."""
-        requests.post(f'{self.BASE_URL}/reseta')
+    def criar_professor_padrao(self):
+        novo_professor = {
+            'nome': 'Professor Padrão',
+            'idade': 40,
+            'materia': 'Matemática',
+            'observacoes': 'Teste de professor'
+        }
+        adicionar_professor(novo_professor)
 
-    # Testes para Alunos
-    def test_000_alunos_retorna_lista(self):
-        r = requests.get(f'{self.BASE_URL}/alunos')
-        self.assertEqual(r.status_code, 200)
-        self.assertIsInstance(r.json(), list)
+    def criar_turma_padrao(self):
+        professor = listar_professores()[0]
+        nova_turma = {
+            'descricao': 'Turma Padrão',
+            'ativo': True,
+            'professor_id': professor['id']
+        }
+        adicionar_turma(nova_turma)
 
-    def test_001_adiciona_aluno_nome_em_branco(self):
-        r = requests.post(f'{self.BASE_URL}/alunos', json={'nome': '', 'id': 1})
-        self.assertEqual(r.status_code, 400)
-        self.assertEqual(r.json()['erro'], 'aluno sem nome')
+    def test_adicionar_aluno(self):
+        turma = listar_turmas()[0]
+        novo_aluno = {
+            'nome': 'Teste Aluno',
+            'idade': 20,
+            'data_nascimento': '2004-01-01',
+            'nota_primeiro_semestre': 8.0,
+            'nota_segundo_semestre': 7.5,
+            'turma_id': turma['id']
+        }
+        adicionar_aluno(novo_aluno)
+        alunos = listar_alunos()
+        self.assertEqual(len(alunos), 1)
+        self.assertEqual(alunos[0]['nome'], 'Teste Aluno')
 
-    def test_002_recupera_todos_os_alunos(self):
-        for i in range(1, 6):
-            requests.post(f'{self.BASE_URL}/alunos', json={'nome': f'Aluno {i}', 'id': i})
+    def test_atualizar_aluno(self):
+        turma = listar_turmas()[0]
+        novo_aluno = {
+            'nome': 'Teste Aluno',
+            'idade': 20,
+            'data_nascimento': '2004-01-01',
+            'nota_primeiro_semestre': 8.0,
+            'nota_segundo_semestre': 7.5,
+            'turma_id': turma['id']
+        }
+        adicionar_aluno(novo_aluno)
+        aluno = listar_alunos()[0]
+        atualizar_aluno(aluno['id'], {
+            'nome': 'Aluno Atualizado',
+            'idade': 21,
+            'data_nascimento': '2004-01-01',
+            'nota_primeiro_semestre': 9.0,
+            'nota_segundo_semestre': 8.5,
+            'turma_id': turma['id']
+        })
+        aluno_atualizado = aluno_por_id(aluno['id'])
+        self.assertEqual(aluno_atualizado['nome'], 'Aluno Atualizado')
 
-        r_lista = requests.get(f'{self.BASE_URL}/alunos')
-        self.assertEqual(r_lista.status_code, 200)
-        lista_retornada = r_lista.json()
-        self.assertEqual(len(lista_retornada), 5)
+    def test_excluir_aluno(self):
+        turma = listar_turmas()[0]
+        novo_aluno = {
+            'nome': 'Teste Aluno',
+            'idade': 20,
+            'data_nascimento': '2004-01-01',
+            'nota_primeiro_semestre': 8.0,
+            'nota_segundo_semestre': 7.5,
+            'turma_id': turma['id']
+        }
+        adicionar_aluno(novo_aluno)
+        aluno = listar_alunos()[0]
+        excluir_aluno(aluno['id'])
+        alunos = listar_alunos()
+        self.assertEqual(len(alunos), 0)
 
-    # Testes para Professores
-    def test_100_professores_retorna_lista(self):
-        r = requests.get(f'{self.BASE_URL}/professores')
-        self.assertEqual(r.status_code, 200)
-        self.assertIsInstance(r.json(), list)
+    def test_atualizar_professor(self):
+        professor = listar_professores()[0]
+        atualizar_professor(professor['id'], {
+            'nome': 'Professor Atualizado',
+            'idade': 45,
+            'materia': 'Física',
+            'observacoes': 'Atualizado'
+        })
+        professor_atualizado = professor_por_id(professor['id'])
+        self.assertEqual(professor_atualizado['nome'], 'Professor Atualizado')
 
-    def test_101_adiciona_professor_nome_em_branco(self):
-        r = requests.post(f'{self.BASE_URL}/professores', json={'nome': '', 'id': 1})
-        self.assertEqual(r.status_code, 400)
-        self.assertEqual(r.json()['erro'], 'professor sem nome')
+    def test_excluir_professor(self):
+        professor = listar_professores()[0]
+        excluir_professor(professor['id'])
+        professores = listar_professores()
+        self.assertEqual(len(professores), 0)
 
-    def test_102_adiciona_professor_id_inexistente(self):
-        r = requests.post(f'{self.BASE_URL}/professores', json={'nome': 'Prof. Carlos', 'id': 1})
-        self.assertEqual(r.status_code, 200)
-        r_id_inexistente = requests.post(f'{self.BASE_URL}/professores', json={'nome': 'Prof. Carlos', 'id': 1})
-        self.assertEqual(r_id_inexistente.status_code, 400)
-        self.assertEqual(r_id_inexistente.json()['erro'], 'id ja utilizada')
+    def test_adicionar_turma(self):
+        professor = listar_professores()[0]
+        nova_turma = {
+            'descricao': 'Nova Turma',
+            'ativo': True,
+            'professor_id': professor['id']
+        }
+        adicionar_turma(nova_turma)
+        turmas = listar_turmas()
+        self.assertEqual(len(turmas), 2)  
+        self.assertEqual(turmas[1]['descricao'], 'Nova Turma')
 
-    def test_103_edita_professor_inexistente(self):
-        r = requests.put(f'{self.BASE_URL}/professores/99', json={'nome': 'Prof. João'})
-        self.assertIn(r.status_code, [400, 404])
-        self.assertEqual(r.json()['erro'], 'professor nao encontrado')
+    def test_atualizar_turma(self):
+        turma = listar_turmas()[0]
+        professor = listar_professores()[0]
+        atualizar_turma(turma['id'], {
+            'descricao': 'Turma Atualizada',
+            'ativo': False,
+            'professor_id': professor['id']
+        })
+        turma_atualizada = turma_por_id(turma['id'])
+        self.assertEqual(turma_atualizada.descricao, 'Turma Atualizada')
 
-    def test_104_deleta_professor_inexistente(self):
-        r = requests.delete(f'{self.BASE_URL}/professores/99')
-        self.assertIn(r.status_code, [400, 404])
-        self.assertEqual(r.json()['erro'], 'professor nao encontrado')
-
-    # Testes para Turmas
-    def test_200_turmas_retorna_lista(self):
-        r = requests.get(f'{self.BASE_URL}/turmas')
-        self.assertEqual(r.status_code, 200)
-        self.assertIsInstance(r.json(), list)
-
-    def test_201_adiciona_turma_nome_em_branco(self):
-        r = requests.post(f'{self.BASE_URL}/turmas', json={'nome': '', 'id': 1})
-        self.assertEqual(r.status_code, 400)
-        self.assertEqual(r.json()['erro'], 'turma sem nome')
-
-    def test_202_adiciona_turma_id_inexistente(self):
-        r = requests.post(f'{self.BASE_URL}/turmas', json={'nome': 'Turma A', 'id': 1})
-        self.assertEqual(r.status_code, 200)
-        r_id_inexistente = requests.post(f'{self.BASE_URL}/turmas', json={'nome': 'Turma A', 'id': 1})
-        self.assertEqual(r_id_inexistente.status_code, 400)
-        self.assertEqual(r_id_inexistente.json()['erro'], 'id ja utilizada')
-
-    def test_203_edita_turma_inexistente(self):
-        r = requests.put(f'{self.BASE_URL}/turmas/99', json={'nome': 'Turma B'})
-        self.assertIn(r.status_code, [400, 404])
-        self.assertEqual(r.json()['erro'], 'turma nao encontrada')
-
-    def test_204_deleta_turma_inexistente(self):
-        r = requests.delete(f'{self.BASE_URL}/turmas/99')
-        self.assertIn(r.status_code, [400, 404])
-        self.assertEqual(r.json()['erro'], 'turma nao encontrada')
+    def test_excluir_turma(self):
+        turma = listar_turmas()[0]
+        excluir_turma(turma['id'])
+        turmas = listar_turmas()
+        self.assertEqual(len(turmas), 0)
 
 if __name__ == '__main__':
     unittest.main()
