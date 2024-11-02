@@ -1,15 +1,15 @@
-TEMPLATE, BANCO DE DADOS, BLUEPRINT, MVC
+## Flask API Project
 
-ALUNO, PROFESSOR E TURMA, CHAVE ESTRANGEIRA, TESTE
-UNITARIO, EXCEPTIONS
+This project was developed for our Flask API.
 
-TRATATIVA DE ERROS, TRY, EXCEPT
+How to Run
+Prerequisites
+Install the required dependencies listed in requirements.txt:
 
-TEMPLATES, MVC, BANCO DE DADOS, BLUE PRINT, TEMPLATE
-TUDO ORGANIZADO, ESTRUTURADO, ARQUITETADO
+pip install -r requirements.txt
 
-FORMA DE AVALIAÇÃO - EM GRUPO E INDIVIDUAL, AP2.
-
-
+Running the Application
+After installing all dependencies, start the server with the following command:
 
 
+python app.py
