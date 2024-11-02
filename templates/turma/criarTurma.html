@@ -13,6 +13,12 @@
       background-color: rgb(128, 128, 136);
       font-family: "Signika", sans-serif;
       color: white;
+      background-color: #9aa3a8;  
+      background-image: url("{{ url_for('static', filename='img/satoro.png') }}");   
+      background-size: 100%;
+      background-repeat: no-repeat; 
+      background-position: center; 
+      background-attachment: fixed; 
     }
 
     h1 {
@@ -62,6 +68,13 @@
 <body>
   <div class="container">
     <h1>Adicionar Nova Turma</h1>
+    <!-- Adiciona um bloco de JavaScript para o alert -->
+    {% if error_message %}
+      <script>
+        alert("{{ error_message }}");
+      </script>
+    {% endif %}
+    
     <form action="{{ url_for('turma.create_turma') }}" method="POST">
       <label for="descricao">Descrição:</label>
       <input type="text" name="descricao" required>

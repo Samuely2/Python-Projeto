@@ -1,20 +1,17 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
-from models.turma import TurmaNaoEncontrada, listar_turmas, turma_por_id, adicionar_turma, atualizar_turma, excluir_turma
+from models.turma import TurmaNaoEncontrada, listar_turmas, turma_por_id, adicionar_turma, atualizar_turma, excluir_turma, ProfessorNaoEncontrado
 
 turma_blueprint = Blueprint('turma', __name__)
 
-# ROTA PRINCIPAL PARA TURMAS
 @turma_blueprint.route('/turma', methods=["GET"])
 def main():
     return 'Rotas para turma'
 
-# ROTA PARA LISTAR TODAS AS TURMAS
 @turma_blueprint.route('/turmas', methods=['GET'])
 def get_turmas():
     turmas = listar_turmas()
     return render_template("turma/turmas.html", turmas=turmas)
 
-# ROTA PARA OBTER UMA TURMA ESPECÍFICA POR ID
 @turma_blueprint.route('/turmas/<int:id_turma>', methods=['GET'])
 def get_turma(id_turma):
     try:
@@ -23,12 +20,10 @@ def get_turma(id_turma):
     except TurmaNaoEncontrada:
         return jsonify({'message': 'Turma não encontrada'}), 404
 
-# ROTA PARA EXIBIR FORMULÁRIO DE CRIAÇÃO DE UMA NOVA TURMA
 @turma_blueprint.route('/turmas/adicionar', methods=['GET'])
 def adicionar_turma_page():
     return render_template('turma/criarTurma.html')
 
-# ROTA PARA CRIAR UMA NOVA TURMA
 @turma_blueprint.route('/turmas', methods=['POST'])
 def create_turma():
     descricao = request.form['descricao']
@@ -39,10 +34,15 @@ def create_turma():
         'professor_id': professor_id,
         'ativo': ativo
     }
-    adicionar_turma(nova_turma)
-    return redirect(url_for('turma.get_turmas'))
+    
+    try:
+        adicionar_turma(nova_turma)
+        return redirect(url_for('turma.get_turmas'))
+    except ProfessorNaoEncontrado as e:
+        # Renderiza o formulário com a mensagem de erro se o professor não for encontrado
+        return render_template('turma/criarTurma.html', error_message=str(e))
 
-# ROTA PARA EXIBIR FORMULÁRIO PARA EDITAR UMA TURMA
+
 @turma_blueprint.route('/turmas/<int:id_turma>/editar', methods=['GET'])
 def editar_turma_page(id_turma):
     try:
@@ -51,7 +51,6 @@ def editar_turma_page(id_turma):
     except TurmaNaoEncontrada:
         return jsonify({'message': 'Turma não encontrada'}), 404
 
-# ROTA PARA EDITAR UMA TURMA
 @turma_blueprint.route('/turmas/<int:id_turma>', methods=['POST'])
 def update_turma(id_turma):
     try:
@@ -65,7 +64,6 @@ def update_turma(id_turma):
     except TurmaNaoEncontrada:
         return jsonify({'message': 'Turma não encontrada'}), 404
 
-# ROTA PARA DELETAR UMA TURMA
 @turma_blueprint.route('/turmas/delete/<int:id_turma>', methods=['POST'])
 def delete_turma(id_turma):
     try:

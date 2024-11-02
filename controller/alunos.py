@@ -36,13 +36,14 @@ from werkzeug.exceptions import NotFound
 def create_aluno():
     try:
         turma_id = int(request.form.get('turma_id'))
-
-        # Verifica se a turma existe no banco de dados
+        
         turma = buscar_turma_por_id(turma_id)
         if not turma:
-            return jsonify({'message': f'A turma com ID {turma_id} não existe.'}), 404
-
-        # Caso a turma exista, prossegue com a criação do aluno
+            return render_template('alunos/criarAlunos.html', error_message=f'A turma com ID {turma_id} não existe.')
+        
+        if not turma.ativo:
+            return render_template('alunos/criarAlunos.html', error_message=f'A turma com ID {turma_id} não está ativa.')
+        
         novo_aluno = {
             'nome': request.form['nome'],
             'idade': int(request.form['idade']),
@@ -57,9 +58,12 @@ def create_aluno():
 
         # Redireciona para a lista de alunos após a criação bem-sucedida
         return redirect(url_for('alunos.get_alunos'))
+    
     except ValueError:
+        # Redireciona para o formulário com mensagem de dados inválidos
         flash('Dados inválidos fornecidos', 'error')
         return redirect(url_for('alunos.get_aluno_form'))
+
 
 
 # ROTA PARA EXIBIR FORMULÁRIO PARA EDITAR UM ALUNO

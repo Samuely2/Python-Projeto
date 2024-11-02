@@ -20,9 +20,6 @@ class Turma(db.Model):
 class TurmaNaoEncontrada(Exception):
     pass
 
-class ProfessorNaoEncontrado(Exception):
-    pass
-
 def turma_por_id(id_turma):
     turma = Turma.query.get(id_turma)
     if not turma:
@@ -46,6 +43,9 @@ def listar_turmas():
         'professor_nome': turma.professor.nome if turma.professor else None
     } for turma in turmas]
 
+class ProfessorNaoEncontrado(Exception):
+    pass
+
 def adicionar_turma(turma_data):
     """Adiciona uma nova turma ao banco de dados."""
     # Verifica se o ID do professor existe
@@ -64,16 +64,15 @@ def adicionar_turma(turma_data):
         db.session.add(nova_turma)
         db.session.commit()
     except Exception as e:
-        db.session.rollback()  # Reverte em caso de erro
-        raise e  # Relança a exceção para tratamento posterior
+        db.session.rollback()
+        raise e
+
 
 def atualizar_turma(id_turma, novos_dados):
-    """Atualiza os dados de uma turma existente."""
     turma = Turma.query.get(id_turma)
     if not turma:
         raise TurmaNaoEncontrada(f"Turma com ID {id_turma} não encontrada.")
     
-    # Verifica se o novo professor existe
     if 'professor_id' in novos_dados:
         professor = buscar_professor_por_id(novos_dados['professor_id'])
         if professor is None:
@@ -103,8 +102,5 @@ def excluir_turma(id_turma):
         raise e
 
 def buscar_turma_por_id(id_turma):
-    """Busca uma turma pelo seu ID."""
-    turma = Turma.query.get(id_turma)
-    if not turma:
-        raise TurmaNaoEncontrada(f"Turma com ID {id_turma} não encontrada.")
-    return turma
+    """Busca uma turma pelo seu ID, retornando None se não for encontrada."""
+    return Turma.query.get(id_turma)
