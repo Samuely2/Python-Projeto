@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/templates/index.html" }
+    { "source": "/(.*)", "destination": "/templates/index.html" },
+    { "source": "/alunos", "destination": "/templates/alunos/index.html" },
+    { "source": "/professores", "destination": "/templates/professores/index.html" },
+    { "source": "/turma", "destination": "/templates/turma/index.html" }
   ]
 }

@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0px;
             background-color: #9aa3a8;  
-            background-image: url("{{ url_for('static', filename='img/satoro.png') }}");
+            background-image: url("/static/img/satoro.png");
             /* Caminho para a sua imagem */
             background-size: 100%; /* Ajusta a imagem para cobrir todo o background */
             background-repeat: no-repeat; /* Não repete a imagem */
@@ -100,9 +100,9 @@
     <div class="infos">
        <h1 id="colorY">Como efetuar o fluxo</h1>
        <p>1- Crie primeiro o professor </p>
-       <li><a href="{{ url_for('professor.get_professores') }}" target="_blank">Professores</a></li>
-       <p>2- Crie a turma e coloca o ID do professor correspondente<li><a href="{{ url_for('turma.get_turmas') }}" target="_blank">Turmas</a></li>
-       <p>3- Crie o aluno e coloque o ID da turma correspondente  <li><a href="{{ url_for('alunos.get_alunos') }}" target="_blank">Alunos</a></li>
+       <li><a href="/templates/professores/professores.html" target="_blank">>Professores</a></li>
+       <p>2- Crie a turma e coloca o ID do professor correspondente<li><a href="/templates/turma/turmas.html" target="_blank">Turmas</a></li>
+       <p>3- Crie o aluno e coloque o ID da turma correspondente  <li><a href="/templates/alunos/alunos.html" target="_blank">Alunos</a></li>
         <br></p>
     </div>
     </div>
